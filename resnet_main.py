@@ -41,7 +41,7 @@ tf.app.flags.DEFINE_integer('target_classes', 28, 'classes for fdc')
 tf.app.flags.DEFINE_bool('DMM_included', False,
 												 'is DMM included in the target classes')
 tf.app.flags.DEFINE_bool('sleep_time', 360,
-												 'duration between tests, time in seconds')
+												 'duration between tests, in seconds')
 
 
 def train(hps):
