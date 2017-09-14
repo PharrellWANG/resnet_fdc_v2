@@ -20,7 +20,7 @@ Run it in c++
       --image=${HOME}/Pictures/flowers.jpg \
       --input_layer=init/fdc_input_node/Conv2D \
       --output_layer=logits/fdc_output_node \
-      --graph=/Users/Pharrell_WANG/workspace/models/resnet/log/train/frozen_fdc_resnet_graph.pb \
+      --graph=/Users/Pharrell_WANG/frozen_graphs/frozen_fdc_resnet_graph.pb \
       --labels=/Users/Pharrell_WANG/workspace/models/resnet/fdc_labels.txt \
       --input_mean=0 \
       --input_std=255
