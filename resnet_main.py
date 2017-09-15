@@ -400,9 +400,9 @@ def evaluate(hps):
 			summary_writer.add_summary(best_precision_summ, train_step)
 			summary_writer.add_summary(summaries, train_step)
 			tf.logging.info(
-				'precision: %.3f, \n best precision: %.3f, \n top_5: %.3f, '
-				'top_6: %.3f, top_7: %.3f, top_8: %.3f, top_9: %.3f, \n top_10: %.3f, '
-				'top_11: %.3f, top_12: %.3f, top_16: %.3f, top_17: %.3f, \n '
+				'precision: %.3f, best precision: %.3f, \n top_5: %.3f, '
+				'top_6: %.3f, top_7: %.3f, top_8: %.3f, top_9: %.3f, top_10: %.3f, '
+				'top_11: %.3f, top_12: %.3f, top_16: %.3f, top_17: %.3f, '
 				'top_18: %.3f, top_19: %.3f, top_20: %.3f, top_28: %.3f, ' %
 				(precision, best_precision, top_5, top_6, top_7,
 				 top_8, top_9, top_10, top_11, top_12, top_16, top_17,
