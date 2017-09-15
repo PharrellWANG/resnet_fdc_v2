@@ -26,7 +26,7 @@ tf.app.flags.DEFINE_integer('eval_batch_count', 10,
 tf.app.flags.DEFINE_integer('eval_batch_size', 100,
 														'Number of samples in a single batch to eval.')
 
-tf.app.flags.DEFINE_integer('train_batch_size', 64,
+tf.app.flags.DEFINE_integer('train_batch_size', 128,
 														'Number of samples in a single batch to train.')
 
 tf.app.flags.DEFINE_bool('eval_once', False,
@@ -69,8 +69,8 @@ def train(hps):
 		precision = tf.reduce_mean(tf.to_float(tf.equal(predictions, truth)))
 		
 		# export inference graph as pb format (proto)
-		tf.train.write_graph(tf.get_default_graph(), FLAGS.train_dir,
-												 'fdc_resnet_inf_graph.pb', False)
+		# tf.train.write_graph(tf.get_default_graph(), FLAGS.train_dir,
+		# 										 'fdc_resnet_inference_graph.pb', False)
 		
 		summary_hook = tf.train.SummarySaverHook(
 			save_steps=10,

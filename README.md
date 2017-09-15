@@ -10,7 +10,7 @@
 
 ##### step 2: fdc training
 
-    $ bazel-bin/resnet/resnet_main --train_data_path='/Users/Pharrell_WANG/data/smooth_removed/data/train_08x08.csv' --log_root='/Users/Pharrell_WANG/workspace/models/resnet/log' --train_dir='/Users/Pharrell_WANG/workspace/models/resnet/log/train' --dataset='fdc' --num_gpus=1
+    $ bazel-bin/resnet/resnet_main --train_data_path='/Users/Pharrell_WANG/data/smooth_removed/data/train_08x08.csv' --log_root='/Users/Pharrell_WANG/workspace/models/resnet/log' --train_dir='/Users/Pharrell_WANG/workspace/models/resnet/log/train' --dataset='fdc' --num_gpus=0
 
                               
 ##### step 3: fdc evaluating
