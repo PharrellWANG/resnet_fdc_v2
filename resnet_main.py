@@ -20,7 +20,7 @@ tf.app.flags.DEFINE_string('train_dir', '',
 													 'Directory to keep training outputs.')
 tf.app.flags.DEFINE_string('eval_dir', '', 'Directory to keep eval outputs.')
 
-tf.app.flags.DEFINE_integer('eval_batch_count', 10,
+tf.app.flags.DEFINE_integer('eval_batch_count', 280,
 														'Number of batches to eval.')
 
 tf.app.flags.DEFINE_integer('eval_batch_size', 100,
@@ -188,7 +188,7 @@ def evaluate(hps):
 			correct_top_28_prediction = 0
 			top_28_prediction_total = 0
 			
-			loss = 0  # for eliminating IDE warning
+			# loss = 0  # for eliminating IDE warning
 			summaries = 0  # for eliminating IDE warning
 			
 			start = time.time()
@@ -201,8 +201,14 @@ def evaluate(hps):
 				sys.stdout.write(
 					'\r>> processing batch: %d / %d' %
 					(bc_cnt, FLAGS.eval_batch_count))
-				(summaries, loss, predictions, truth, train_step) = sess.run(
-					[model.summaries, model.cost, model.predictions,
+				
+				# pha.zx: remove the loss for running the eval mode in cpp.
+				# (summaries, loss, predictions, truth, train_step) = sess.run(
+				# 	[model.summaries, model.cost, model.predictions,
+				# 	 model.labels, model.global_step])
+				
+				(summaries, predictions, truth, train_step) = sess.run(
+					[model.summaries, model.predictions,
 					 model.labels, model.global_step])
 				truth = np.argmax(truth, axis=1)
 				
@@ -289,26 +295,15 @@ def evaluate(hps):
 				correct_prediction += np.sum(truth == predictions)
 				total_prediction += predictions.shape[0]
 			
-			# confusion matrix #################
-			# for row in range(FLAGS.target_classes):
-			#     print('---------------')
-			#     print('mode : ' + str(row))
-			#     print('----------')
-			#     for col in range(FLAGS.target_classes):
-			#         if confusion_matrix_8x8[row, col] != 0.0:
-			#             print('mode: ' + str(row) + ' --->    number of predictions in mode ' + str(col) + ' :  ' + str(
-			#                 confusion_matrix_8x8[row, col]))
-			
 			np.savetxt(
 				"/Users/Pharrell_WANG/workspace/models/resnet/confusion_matrix/"
 				+ str(ckpt_state.model_checkpoint_path)[-10:] + ".csv",
 				confusion_matrix_8x8, fmt='%i',
 				delimiter=",")
-			# confusion matrix #################
+			# confusion matrix
 			precision = 1.0 * correct_prediction / total_prediction
 			best_precision = max(precision, best_precision)
 			
-			# avg_top_5 = total_top_5 / FLAGS.eval_batch_count
 			top_5 = 1.0 * correct_top_5_prediction / top_5_prediction_total
 			top_6 = 1.0 * correct_top_6_prediction / top_6_prediction_total
 			top_7 = 1.0 * correct_top_7_prediction / top_7_prediction_total
@@ -405,21 +400,21 @@ def evaluate(hps):
 			summary_writer.add_summary(best_precision_summ, train_step)
 			summary_writer.add_summary(summaries, train_step)
 			tf.logging.info(
-				'loss: %.3f, precision: %.3f, best precision: %.3f, top_5: %.3f, '
-				'top_6: %.3f, top_7: %.3f, top_8: %.3f, top_9: %.3f, top_10: %.3f, '
-				'top_11: %.3f, top_12: %.3f, top_16: %.3f, top_17: %.3f, '
+				'precision: %.3f, \n best precision: %.3f, \n top_5: %.3f, '
+				'top_6: %.3f, top_7: %.3f, top_8: %.3f, top_9: %.3f, \n top_10: %.3f, '
+				'top_11: %.3f, top_12: %.3f, top_16: %.3f, top_17: %.3f, \n '
 				'top_18: %.3f, top_19: %.3f, top_20: %.3f, top_28: %.3f, ' %
-				(loss, precision, best_precision, top_5, top_6, top_7,
+				(precision, best_precision, top_5, top_6, top_7,
 				 top_8, top_9, top_10, top_11, top_12, top_16, top_17,
 				 top_18, top_19, top_20, top_28,
 				 ))
 			summary_writer.flush()
 			
 			elapsed_time = time.time() - start
-			print('total_time:')
+			print('total time:')
 			print(elapsed_time)
-			print('total prediction: ' + str(total_prediction))
-			print('single time spent for each prediction: ' + str(
+			print('total predictions: ' + str(total_prediction))
+			print('average time for each prediction: ' + str(
 				elapsed_time / float(total_prediction)))
 			
 			if FLAGS.eval_once:
@@ -429,8 +424,6 @@ def evaluate(hps):
 
 
 def main(_):
-	# batch_size = 0
-	# num_classes = 0
 	
 	if FLAGS.mode == 'train':
 		batch_size = FLAGS.train_batch_size
@@ -460,7 +453,6 @@ def main(_):
 														 relu_leakiness=0.1,
 														 optimizer='mom')
 	
-	# with tf.device(dev):
 	if FLAGS.mode == 'train':
 		train(hps)
 	elif FLAGS.mode == 'eval':
